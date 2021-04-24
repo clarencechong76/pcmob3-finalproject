@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import * as SQLite from "expo-sqlite";
+import { Ionicons } from "@expo/vector-icons";
 
 const db = SQLite.openDatabase("notes.db");
 
@@ -74,12 +75,49 @@ export default function NotesScreen({ navigation, route }) {
     navigation.navigate("Add Note");
   }
 
-  function renderItem({ item }){
-    <View>
-      <Text>{item.title}</Text>
+  function deleteNote(id) {
+    console.log("Deleting " + id);
+    db.transaction(
+      (tx) => {
+        tx.executeSql(`DELETE FROM notes WHERE id=${id}`);
+      },
+      null,
+      refreshNotes
+    );
+  }
 
-    </View>
-  };
+  function deleteNote(id) {
+    console.log("Deleting " + id);
+    db.transaction(
+      (tx) => {
+        tx.executeSql(`DELETE FROM notes WHERE id=${id}`);
+      },
+      null,
+      refreshNotes
+    );
+  }
+  function renderItem({ item }) {
+    return (
+      <View
+        style={{
+          padding: 10,
+          paddingTop: 20,
+          paddingBottom: 20,
+          borderBottomColor: "#ccc",
+          borderBottomWidth: 1,
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <Text>{item.title}</Text>
+        <TouchableOpacity onPress={() => deleteNote(item.id)}>
+          <Ionicons name="trash" size={16} color="#944" />
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  
 
   return (
     <View >
